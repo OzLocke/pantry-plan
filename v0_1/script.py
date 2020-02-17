@@ -66,7 +66,17 @@ class Pantry:
         while more == "y":
             # Take input for each dictionary value
             item = input("\nWhat is the item called?\n\n")
-            unit = input("\nWhat unit should I store the item as?\n\n")
+            
+            # Ensure unit input is valid
+            unit_error = True
+            while unit_error:
+                unit = input("\nWhat unit should I store the item as?\n\n")
+                if not unit in self.unit_types:
+                    print(f"Sorry, {unit} is not a valid unit.")
+                    self.display_units()
+                else:
+                    unit_error = False
+            
             quantity = input("\nWhat quantity of this item should I store?\n\n")
 
             if any(entry["item"] == item for entry in self.pantry):
