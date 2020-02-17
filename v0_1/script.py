@@ -10,26 +10,30 @@ class UserInput:
         return "an instance of the UserInput functional class"
 
     def user_input(self):
-        user_choice = int(input("What would you like to do?\n1 - Review Pantry Contents\n2 - Update Pantry\n3 - Quit\n\n"))
+        user_choice = int(input("What would you like to do?\n1 - Review Pantry Contents\n2 - View available units\n3 - Update Pantry\n4 - Quit\n\n"))
 
         # Call methods from linked pantry instance based on user input
         if user_choice == 1:
             self.pantry_instance.display_pantry()
             self.user_input()
         if user_choice == 2:
-            self.pantry_instance.update_pantry()
+            self.pantry_instance.display_units()
             self.user_input()
         if user_choice == 3:
+            self.pantry_instance.update_pantry()
+            self.user_input()
+        if user_choice == 4:
             print("\nGoodbye!")
 
 class Pantry:
     def __init__(self):
         # set up directory
         self.dirname = os.path.dirname(__file__)
-        self.data_file = os.path.join(self.dirname, 'pantryplan.csv')
+        self.data_file = os.path.join(self.dirname, "pantryplan.csv")
 
         # set up variables
         self.pantry = []
+        self.unit_types = ["bag", "box", "bottle", "carton", "tin", "case", "pack", "kg", "l"]
 
         # Load in existing pantry data
         with open(self.data_file) as pantry_csv:
@@ -51,6 +55,11 @@ class Pantry:
         for item in self.pantry:
             print("{item} | {unit} | {quantity}".format(item=item["item"], unit=item["unit"], quantity=item["quantity"]))
         print("---------------------\n")
+    
+    def display_units(self):
+        # Create nicely written list of units
+        units = ', '.join(self.unit_types)
+        print(f"\nThe available units are: {units}.\n---------------------\n")
 
     def update_pantry(self):
         more = "y"
