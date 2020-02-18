@@ -3,11 +3,12 @@
 
 from script import Pantry, UserInput
 pantry_name = "My Pantry"
+system_messages = True
 
 # -- Set up instances
 pantry = Pantry(pantry_name)
 # User input contains pantry instance so that it call that instance's methods
-user_input = UserInput(pantry)
+user_input = UserInput(pantry, system_messages)
 
 # -- Begin interaction
 print("Welcome to Pantry Plan 0.1")
