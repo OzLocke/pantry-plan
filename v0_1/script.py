@@ -90,20 +90,21 @@ class Pantry:
     def update_pantry(self, item, unit, quantity, system_massages = False):
         if system_massages: print("SYSTEM: Checking item against pantry")
         if any(entry["item"] == item for entry in self.pantry):
+            # Get the index of the item so we can access the dictionary within the pantry list by index
             item_index = next((index for (index, entry) in enumerate(self.pantry) if entry["item"] == item), None)
             if self.pantry[item_index]["unit"] == unit:
-                if system_massages: print(f"SYSTEM: Adding {item} to existing item")
+                if system_massages: print(f"SYSTEM: Adding {quantity} of {item} to existing item")
                 pantry_quantity = int(self.pantry[item_index]["quantity"])
                 pantry_quantity += int(quantity)
                 self.pantry[item_index]["quantity"] = str(pantry_quantity)
             else:
                 # Build dictionary and add to pantry list
-                if system_massages: print(f"SYSTEM: Creating new entry for {item}")
+                if system_massages: print(f"SYSTEM: Creating new entry for duplicate {item} with new unit of {unit} and quantity of {quantity}")
                 new_entry = {"item": item, "unit": unit, "quantity": quantity}
                 self.pantry.append(new_entry)
         else:
             # Build dictionary and add to pantry list
-            if system_massages: print(f"SYSTEM: Creating new entry for {item}")
+            if system_massages: print(f"SYSTEM: Creating new entry for {item} with uinit of {unit} and quantity of {quantity}")
             new_entry = {"item": item, "unit": unit, "quantity": quantity}
             self.pantry.append(new_entry)
         if system_massages: print("Finished updating pantry\n---------------------")
