@@ -2,9 +2,10 @@
 ## Takes user input and logs to CSV, tracks contents of pantry ##
 
 from script import Pantry, UserInput
+pantry_name = "My Pantry"
 
 # -- Set up instances
-pantry = Pantry()
+pantry = Pantry(pantry_name)
 # User input contains pantry instance so that it call that instance's methods
 user_input = UserInput(pantry)
 

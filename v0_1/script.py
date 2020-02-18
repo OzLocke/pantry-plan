@@ -9,6 +9,11 @@ class UserInput:
     def __repr__(self):
         return "an instance of the UserInput functional class"
 
+    def display_units(self):
+        # Create nicely written list of units
+        units = ', '.join(self.pantry_instance.unit_types)
+        print(f"\nThe available units are: {units}.\n---------------------\n")
+
     def input_pantry_entries(self):
         more = "y"
         while more == "y":
@@ -20,7 +25,7 @@ class UserInput:
                 unit = input("\nWhat unit should I store the item as?\n\n")
                 if not unit in self.pantry_instance.unit_types:
                     print(f"Sorry, {unit} is not a valid unit.")
-                    self.pantry_instance.display_units()
+                    self.display_units()
                 else:
                     unit_error = False
             quantity = input("\nWhat quantity of this item should I store?\n\n")
@@ -42,7 +47,7 @@ class UserInput:
             print("---------------------\n")
             self.user_input()
         if user_choice == 2:
-            self.pantry_instance.display_units()
+            self.display_units()
             self.user_input()
         if user_choice == 3:
             self.input_pantry_entries()
@@ -51,7 +56,7 @@ class UserInput:
             print("\nGoodbye!")
 
 class Pantry:
-    def __init__(self):
+    def __init__(self, p_name):
         # set up directory
         self.dirname = os.path.dirname(__file__)
         self.data_file = os.path.join(self.dirname, "pantryplan.csv")
@@ -59,6 +64,7 @@ class Pantry:
         # set up variables
         self.pantry = []
         self.unit_types = ["bag", "box", "bottle", "carton", "tin", "case", "pack", "kg", "l"]
+        self.pantry_name = p_name
 
         # Load in existing pantry data
         with open(self.data_file) as pantry_csv:
@@ -73,16 +79,11 @@ class Pantry:
             print("Finished reading file\n---------------------")
 
     def __repr__(self):
-        return "an instance of the Pantry functional class"
+        return f"an instance of the Pantry functional class called {self.name}"
 
     def display_pantry(self):       
         for item in self.pantry:
             print("{item} | {unit} | {quantity}".format(item=item["item"], unit=item["unit"], quantity=item["quantity"]))
-    
-    def display_units(self):
-        # Create nicely written list of units
-        units = ', '.join(self.unit_types)
-        print(f"\nThe available units are: {units}.\n---------------------\n")
 
     def update_pantry(self, item, unit, quantity):
         if any(entry["item"] == item for entry in self.pantry):
