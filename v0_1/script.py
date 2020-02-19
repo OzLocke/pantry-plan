@@ -6,42 +6,39 @@ class UserInput:
     def __init__(self, pantry, verbose = False):
         self.pantry_instance = pantry
         self.verbose = verbose
+        self.type_lookup = {"unit": self.pantry_instance.unit_types, "area": self.pantry_instance.area_types}
     
     def __repr__(self):
         return "an instance of the UserInput functional class"
 
     def display_types(self, d_type):
-        d_type_lookup = {"unit": self.pantry_instance.unit_types, "area": self.pantry_instance.area_types}
-        d_type = d_type_lookup[d_type]
+        d_type_selection = self.type_lookup[d_type]
         # Create nicely written list
-        types = ', '.join(d_type)
-        print(f"\nThe available units are: {types}.\n---------------------\n")
+        types = ', '.join(d_type_selection)
+        print(f"\nThe available {d_type}s are: {types}.\n---------------------\n")
         
-
     def input_pantry_entries(self):
+        # Create a function that allows checking user input where needed
+        def type_error_check(i_type):
+            # Ensure unit input is valid
+            type_error = True
+            texts = {"unit": "What unit should I store the item as?", "area": "What area should I store the item in?"}
+            while type_error:
+                u_input = input(f"\n{texts[i_type]}\n\n")
+                if not u_input in self.type_lookup[i_type]:
+                    print(f"\nSorry, that's not a valid input.")
+                    self.display_types(i_type)
+                else:
+                    type_error = False
+            return u_input
+        
         more = "y"
         while more == "y":
             # Take input for each dictionary value
             item = input("\nWhat is the item called?\n\n")
-            # Ensure unit input is valid
-            unit_error = True
-            while unit_error:
-                unit = input("\nWhat unit should I store the item as?\n\n")
-                if not unit in self.pantry_instance.unit_types:
-                    print(f"Sorry, {unit} is not a valid unit.")
-                    self.display_types("unit")
-                else:
-                    unit_error = False
+            unit = type_error_check("unit")
             quantity = input("\nWhat quantity of this item should I store?\n\n")
-            # Ensure unit input is valid
-            area_error = True
-            while area_error:
-                area = input("\nAnd where will you be storing it?\n\n")
-                if not area in self.pantry_instance.area_types:
-                    print(f"Sorry, {area} is not a valid area.")
-                    self.display_types("area")
-                else:
-                    area_error = False
+            area = type_error_check("area")
 
             # Add to pantry list
             self.pantry_instance.update_pantry(item, unit, quantity, area, self.verbose)
@@ -51,7 +48,7 @@ class UserInput:
         self.pantry_instance.write_pantry(self.verbose)
 
     def user_input(self):
-        user_choice = int(input("What would you like to do?\n1 - Review Pantry Contents\n2 - View available units\n3 - Update Pantry\n4 - Quit\n\n"))
+        user_choice = int(input("What would you like to do?\n1 - Review Pantry Contents\n2 - View available units\n3 - View available areas\n4 - Update Pantry\n5 - Quit\n\n"))
 
         # Call methods from linked pantry instance based on user input
         if user_choice == 1:
@@ -63,9 +60,12 @@ class UserInput:
             self.display_types("unit")
             self.user_input()
         if user_choice == 3:
-            self.input_pantry_entries()
+            self.display_types("area")
             self.user_input()
         if user_choice == 4:
+            self.input_pantry_entries()
+            self.user_input()
+        if user_choice == 5:
             print("\nGoodbye!")
 
 class Pantry:
@@ -117,7 +117,7 @@ class Pantry:
                 self.pantry.append(new_entry)
         else:
             # Build dictionary and add to pantry list
-            if verbose: print(f"SYSTEM: Creating new entry for {item} with uinit of {unit} and quantity of {quantity} in the {area}")
+            if verbose: print(f"SYSTEM: Creating new entry for {item} with unit of {unit} and quantity of {quantity} in the {area}")
             new_entry = {"item": item, "unit": unit, "quantity": quantity, "area": area}
             self.pantry.append(new_entry)
         if verbose: print("SYSTEM: Finished updating pantry\n---------------------")
