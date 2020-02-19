@@ -1,9 +1,2 @@
-item,unit,quantity
-test1,bag,2
-test2,box,2
-test1,bottle,1
-gire,bottle,2
-fire,bottle,2
-testingt,box,1
-ter,bag,1
-tang,bottle,5
+item,unit,quantity,area
+test,bag,1,fridge
