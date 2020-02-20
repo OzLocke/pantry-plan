@@ -3,8 +3,8 @@
 import csv, os
 
 class UserInput:
-    def __init__(self, pantry, verbose = False):
-        self.pantry_instance = pantry
+    def __init__(self, verbose = False):
+        self.pantry_instance = Pantry()
         self.verbose = verbose
         self.type_lookup = {"unit": self.pantry_instance.unit_types, "area": self.pantry_instance.area_types}
     
@@ -69,7 +69,7 @@ class UserInput:
             print("\nGoodbye!")
 
 class Pantry:
-    def __init__(self, p_name):
+    def __init__(self):
         # set up directory
         self.file_name = "pantryplan.csv"
         self.dirname = os.path.dirname(__file__)
@@ -79,7 +79,6 @@ class Pantry:
         self.pantry = []
         self.unit_types = ["bag", "box", "bottle", "carton", "tin", "case", "pack", "kg", "l"]
         self.area_types = ["fridge", "freezer", "cupboard"]
-        self.pantry_name = p_name
 
         # Load in existing pantry data
         with open(self.data_file) as pantry_csv:
@@ -94,7 +93,7 @@ class Pantry:
             print("SYSTEM: Finished reading file\n---------------------")
 
     def __repr__(self):
-        return f"\nAn instance of the Pantry functional class called {self.pantry_name}"
+        return f"\nAn instance of the Pantry functional class"
 
     def display_pantry(self):       
         for item in self.pantry:
