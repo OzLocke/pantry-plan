@@ -7,6 +7,7 @@ class UserInput:
         self.pantry_instance = Pantry()
         self.verbose = verbose
         self.type_lookup = {"unit": self.pantry_instance.unit_types, "area": self.pantry_instance.area_types}
+        self.menu = {1: "Review Pantry Contents", 2: "View available units", 3: "View available areas", 4: "Update Pantry", 5: "Quit"}
     
     def __repr__(self):
         return "an instance of the UserInput functional class"
@@ -52,27 +53,32 @@ class UserInput:
         self.pantry_instance.write_pantry(self.verbose)
 
     def user_input(self):
+        # Print menu
+        for key, value in self.menu.items():
+            print(f"{str(key)} - {value}")
+        
+        # Take user input, with error handling
         error = True
         while error:
             try:
-                user_choice = int(input("What would you like to do?\n1 - Review Pantry Contents\n2 - View available units\n3 - View available areas\n4 - Update Pantry\n5 - Quit\n\n"))
+                user_choice = int(input("\nWhat would you like to do?\n\n"))
 
                 # Call methods from linked pantry instance based on user input
-                if user_choice == 1:
+                if self.menu[user_choice] == "Review Pantry Contents":
                     print("\nOK, here' the current pantry list:\n\nItem | Unit | Quantity | Area")
                     self.pantry_instance.display_pantry()
                     print("---------------------\n")
                     self.user_input()
-                elif user_choice == 2:
+                elif self.menu[user_choice] == "View available units":
                     self.display_types("unit")
                     self.user_input()
-                elif user_choice == 3:
+                elif self.menu[user_choice] == "View available areas":
                     self.display_types("area")
                     self.user_input()
-                elif user_choice == 4:
+                elif self.menu[user_choice] == "Update Pantry":
                     self.input_pantry_entries()
                     self.user_input()
-                elif user_choice == 5:
+                elif self.menu[user_choice] == "Quit":
                     print("\nGoodbye!")
                 else:
                     raise ValueError
