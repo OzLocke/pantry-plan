@@ -1,4 +1,6 @@
 item,unit,quantity,area
-test,bag,22,fridge
+test,bag,23,fridge
 test2,bottle,3,fridge
 test,s,3,fr
+test,bottle,12,fridge
+tet,bag,1,fridge

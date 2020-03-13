@@ -25,11 +25,11 @@ class UserInput:
         more = "y"
         while more == "y":
             # Take input for each dictionary value
-            item = input("\nWhat is the item called?\n\n")
+            item = input("\nWhat is the item called?\n\n").lower()
             
             error = True
             while error:
-                unit = input("\nWhat unit should I store the item as?\n\n")
+                unit = input("\nWhat unit should I store the item as?\n\n").lower()
                 error = self.error_checker.type_error_check(unit, "unit")
             
             error = True
@@ -42,13 +42,26 @@ class UserInput:
 
             error = True
             while error:
-                area = input("\nWhat area should I store the item in?\n\n")
+                area = input("\nWhat area should I store the item in?\n\n").lower()
                 error = self.error_checker.type_error_check(area, "area")
 
-            # Add to pantry list
-            self.pantry_instance.update_pantry(item, unit, quantity, area, self.verbose)
-            # Check for continue
-            more = input("\nWould you like to add another item? (y or n)\n\n")
+            #Confirm user input
+            print(f"\nYou are adding {item} ({quantity} {unit}s) to {area}, is this correct?\n")
+            error = True
+            while error:
+                confirm = input("y or n\n\n").lower()
+                error = self.error_checker.confirm_error_check(confirm)
+            #If input was incorect go back to start of loop
+            if confirm.lower() == "n":
+                continue
+            elif confirm.lower() == "y":
+                # Add to pantry list
+                self.pantry_instance.update_pantry(item, unit, quantity, area, self.verbose)
+                # Check for continue
+                error = True
+                while error:
+                    more = input("\nWould you like to add another item? (y or n)\n\n").lower()
+                    error = self.error_checker.confirm_error_check(more)
         # Write to database
         self.pantry_instance.write_pantry(self.verbose)
 
@@ -99,6 +112,12 @@ class ErrorChecker(UserInput):
             return True 
         else:
             return False
+
+    def confirm_error_check(self, u_input):
+        if u_input in ["n", "y"]:
+            return False
+        else:
+            return True        
 class Pantry:
     def __init__(self):
         # set up directory
