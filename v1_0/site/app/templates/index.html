@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Hi, {{ user.username }}!</h1>
+    <p>Here's what your pantry looks like:</p>
+    
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Unit</th>
+                    <th>Quantity</th>
+                    <th>Area</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.item }}</td>
+                    <td>{{ item.unit }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.area }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div> 
+{% endblock %}
